@@ -1,11 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render 
 from .models import Subject
 # Create your views here.
 
 def subject_list(request):
     subjects = Subject.objects.all()
-    output = ""
-    for subject in subjects:
-        output += subject.name + "<br>"
-    return HttpResponse(output)
+
+    return render(
+        request,
+        "accounts/subject_list.html",
+        {"subjects": subjects}
+    )
