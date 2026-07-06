@@ -40,3 +40,46 @@ def add_note(request, id):
             "subject" : subject
         }
     )
+
+def note_detail(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id
+    )
+
+    return render(
+        request,
+        "accounts/note_detail.html",
+        {
+            "note": note
+        }
+    )
+
+def edit_note(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id
+    )
+
+    if request.method == "POST":
+
+        note.title = request.POST["title"]
+
+        note.content = request.POST["content"]
+
+        note.save()
+
+        return redirect(
+            "note_detail",
+            id=note.id
+        )
+
+    return render(
+        request,
+        "accounts/edit_note.html",
+        {
+            "note": note
+        }
+    )

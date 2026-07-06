@@ -6,7 +6,11 @@
 
 {% for note in notes %}
 
-    <li>{{ note.title }}</li>
+    <li>
+    <a href="/notes/{{ note.id }}/">
+        {{ note.title }}
+    </a>
+    </li>
 
 {% empty %}
 
