@@ -37,4 +37,10 @@ urlpatterns = [
         "logout/",
         views.user_logout,
         name="logout"),
+
+    path(
+        "notes/<int:id>/summary/",
+        views.generate_summary,
+        name="generate_summary"
+),
 ]

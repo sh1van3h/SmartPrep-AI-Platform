@@ -1,9 +1,10 @@
 from django.shortcuts import render , get_object_or_404
-from .models import Subject , Note
+from .models import Subject , Note 
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from . import ai_service
 # Create your views here.
 
 @login_required
@@ -76,11 +77,18 @@ def edit_note(request, id):
         subject__user=request.user
     )
 
+    old_content = note.content
+
     if request.method == "POST":
 
         note.title = request.POST["title"]
 
-        note.content = request.POST["content"]
+        new_content = request.POST["content"]
+
+        note.content = new_content
+
+        if old_content != new_content:
+            note.summary_is_outdated = True
 
         note.save()
 
@@ -181,3 +189,26 @@ def user_logout(request):
     logout(request)
 
     return redirect("login")
+
+@login_required
+def generate_summary(request, id):
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    if note.ai_summary and not note.summary_is_outdated:
+        return redirect("note_detail", id=note.id)
+
+    try:
+        summary = ai_service.generate_summary(note.content)
+
+        note.ai_summary = summary
+        note.summary_is_outdated = False
+        note.save()
+
+    except Exception as e:
+        print(e)  # We'll replace this with proper logging later.
+
+    return redirect("note_detail", id=note.id)

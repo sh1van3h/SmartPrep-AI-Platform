@@ -8,16 +8,45 @@
 
 <br>
 
-<a href="/notes/{{ note.id }}/edit/">
-
+<a href="{% url 'edit_note' note.id %}">
     Edit Note
-
 </a>
 
 <br><br>
 
-<a href="/notes/{{ note.id }}/delete/">
-
+<a href="{% url 'delete_note' note.id %}">
     Delete Note
+</a>
 
+<hr>
+
+<h2>AI Summary</h2>
+
+{% if note.ai_summary %}
+
+    <p>{{ note.ai_summary }}</p>
+
+    {% if note.summary_is_outdated %}
+        <p><strong>⚠️ Summary may be outdated.</strong></p>
+
+        <a href="{% url 'generate_summary' note.id %}">
+            Regenerate Summary
+        </a>
+
+    {% endif %}
+
+{% else %}
+
+    <p>No summary generated yet.</p>
+
+    <a href="{% url 'generate_summary' note.id %}">
+        Generate Summary
+    </a>
+
+{% endif %}
+
+<br>
+
+<a href="{% url 'generate_summary' note.id %}">
+    Generate Summary
 </a>

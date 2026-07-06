@@ -13,6 +13,8 @@ class Note(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
+    ai_summary = models.TextField(blank=True,null=True)
+    summary_is_outdated = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
