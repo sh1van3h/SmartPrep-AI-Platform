@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from google import genai
+import json
 
 load_dotenv()
 
@@ -33,3 +34,37 @@ Study Notes:
     )
 
     return response.text
+
+def generate_flashcards(text):
+
+    prompt = f"""
+You are an expert study assistant.
+
+Generate exactly 5 flashcards from the study notes.
+
+Return ONLY valid JSON.
+
+Format:
+
+[
+    {{
+        "question": "...",
+        "answer": "..."
+    }}
+]
+
+Do not write markdown.
+Do not write explanation.
+Return JSON only.
+
+Study Notes:
+
+{text}
+"""
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt
+    )
+
+    return json.loads(response.text)

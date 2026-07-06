@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404
-from .models import Subject , Note 
+from .models import Subject , Note , Flashcard
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -212,3 +212,31 @@ def generate_summary(request, id):
         print(e)  # We'll replace this with proper logging later.
 
     return redirect("note_detail", id=note.id)
+
+@login_required
+def generate_flashcards(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    note.flashcards.all().delete()
+
+    flashcards = ai_service.generate_flashcards(
+        note.content
+    )
+
+    for flashcard in flashcards:
+
+        Flashcard.objects.create(
+            note=note,
+            question=flashcard["question"],
+            answer=flashcard["answer"]
+        )
+
+    return redirect(
+        "note_detail",
+        id=note.id,
+    )

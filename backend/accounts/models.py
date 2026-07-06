@@ -20,3 +20,19 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Flashcard(models.Model):
+
+    note = models.ForeignKey(
+        Note,
+        on_delete=models.CASCADE,
+        related_name="flashcards"
+    )
+
+    question = models.TextField()
+
+    answer = models.TextField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
