@@ -44,8 +44,12 @@ urlpatterns = [
         name="generate_summary"),
 
     path(
-        "notes/<int:id>/flashcards/",
+        "notes/<int:id>/generate-flashcards/",
         views.generate_flashcards,
-        name="generate_flashcards",
-),
+        name="generate_flashcards"),
+    path(
+        "notes/<int:id>/flashcards/",
+        views.flashcards,
+        name="flashcards",
+)
 ]

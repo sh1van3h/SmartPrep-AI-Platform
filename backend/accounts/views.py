@@ -237,6 +237,23 @@ def generate_flashcards(request, id):
         )
 
     return redirect(
-        "note_detail",
+        "flashcards",
         id=note.id,
+    )
+
+@login_required
+def flashcards(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    return render(
+        request,
+        "accounts/flashcards.html",
+        {
+            "note": note
+        }
     )

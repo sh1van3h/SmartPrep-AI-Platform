@@ -1,0 +1,35 @@
+<h1>Flashcards</h1>
+
+<h2>{{ note.title }}</h2>
+
+{% for flashcard in note.flashcards.all %}
+
+    <div>
+
+        <strong>Question:</strong>
+
+        {{ flashcard.question }}
+
+        <br><br>
+
+        <strong>Answer:</strong>
+
+        {{ flashcard.answer }}
+
+    </div>
+
+    <hr>
+
+{% empty %}
+
+    <p>No flashcards generated yet.</p>
+
+{% endfor %}
+
+<a href="{% url 'generate_flashcards' note.id %}">
+    Generate Flashcards
+</a>
+<br>
+<a href="{% url 'note_detail' note.id %}">
+    ← Back to Note
+</a>
