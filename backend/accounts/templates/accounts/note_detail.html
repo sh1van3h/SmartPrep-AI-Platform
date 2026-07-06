@@ -4,55 +4,68 @@
 
 <hr>
 
-<p>Subject: {{ note.subject.name }}</p>
+<p><strong>Subject:</strong> {{ note.subject.name }}</p>
 
-<br>
+<hr>
+
+<h2>📄 AI Summary</h2>
+
+{% if note.ai_summary %}
+
+    <p>✅ Summary Available</p>
+
+{% else %}
+
+    <p>❌ No Summary Generated</p>
+
+{% endif %}
+
+<a href="{% url 'summary' note.id %}">
+    View Summary
+</a>
+
+<hr>
+
+<h2>🃏 Flashcards</h2>
+
+{% if note.flashcards.count %}
+
+    <p>
+        {{ note.flashcards.count }} Flashcards Available
+    </p>
+
+{% else %}
+
+    <p>No Flashcards Generated</p>
+
+{% endif %}
+
+<a href="{% url 'flashcards' note.id %}">
+    View Flashcards
+</a>
+
+<hr>
+
+<h2>📝 Quiz</h2>
+
+<p>Coming Soon...</p>
+
+<hr>
+
+<h2>⚙️ Actions</h2>
 
 <a href="{% url 'edit_note' note.id %}">
-    Edit Note
+    ✏️ Edit Note
 </a>
 
 <br><br>
 
 <a href="{% url 'delete_note' note.id %}">
-    Delete Note
+    🗑️ Delete Note
 </a>
 
-<hr>
+<br><br>
 
-<h2>AI Summary</h2>
-
-{% if note.ai_summary %}
-
-    <p>{{ note.ai_summary }}</p>
-
-    {% if note.summary_is_outdated %}
-        <p><strong>⚠️ Summary may be outdated.</strong></p>
-
-        <a href="{% url 'generate_summary' note.id %}">
-            Regenerate Summary
-        </a>
-
-    {% endif %}
-
-{% else %}
-
-    <p>No summary generated yet.</p>
-
-    <a href="{% url 'generate_summary' note.id %}">
-        Generate Summary
-    </a>
-
-{% endif %}
-
-<br>
-
-<a href="{% url 'generate_summary' note.id %}">
-    Generate Summary
-</a>
-
-<h2>Flashcards</h2>
-
-<a href="{% url 'flashcards' note.id %}">
-    View Flashcards
+<a href="{% url 'subject_detail' note.subject.id %}">
+    ← Back to Subject
 </a>

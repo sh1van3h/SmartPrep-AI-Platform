@@ -1,35 +1,51 @@
-<h1>Flashcards</h1>
+<h1>🃏 Flashcards</h1>
 
 <h2>{{ note.title }}</h2>
 
-{% for flashcard in note.flashcards.all %}
+<hr>
 
-    <div>
+{% if note.flashcards.count %}
 
-        <strong>Question:</strong>
+    {% for flashcard in note.flashcards.all %}
 
-        {{ flashcard.question }}
+        <div>
 
-        <br><br>
+            <strong>Question:</strong>
 
-        <strong>Answer:</strong>
+            <p>{{ flashcard.question }}</p>
 
-        {{ flashcard.answer }}
+            <strong>Answer:</strong>
 
-    </div>
+            <p>{{ flashcard.answer }}</p>
 
-    <hr>
+        </div>
 
-{% empty %}
+        <hr>
+
+    {% endfor %}
+
+    <br>
+
+<a href="{% url 'generate_flashcards' note.id %}">
+    🔄 Regenerate Flashcards
+</a>
+
+<br><br>
+
+{% else %}
 
     <p>No flashcards generated yet.</p>
 
-{% endfor %}
+    <br>
 
-<a href="{% url 'generate_flashcards' note.id %}">
-    Generate Flashcards
-</a>
-<br>
+    <a href="{% url 'generate_flashcards' note.id %}">
+        Generate Flashcards
+    </a>
+
+{% endif %}
+
+<br><br>
+
 <a href="{% url 'note_detail' note.id %}">
     ← Back to Note
 </a>

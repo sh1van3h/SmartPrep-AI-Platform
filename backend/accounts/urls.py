@@ -39,7 +39,7 @@ urlpatterns = [
         name="logout"),
 
     path(
-        "notes/<int:id>/summary/",
+        "notes/<int:id>/generate-summary/",
         views.generate_summary,
         name="generate_summary"),
 
@@ -50,6 +50,9 @@ urlpatterns = [
     path(
         "notes/<int:id>/flashcards/",
         views.flashcards,
-        name="flashcards",
-)
+        name="flashcards",),
+    path(
+        "notes/<int:id>/summary/",
+        views.summary,
+        name="summary",),
 ]

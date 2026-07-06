@@ -257,3 +257,20 @@ def flashcards(request, id):
             "note": note
         }
     )
+
+@login_required
+def summary(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    return render(
+        request,
+        "accounts/summary.html",
+        {
+            "note": note
+        }
+    )
