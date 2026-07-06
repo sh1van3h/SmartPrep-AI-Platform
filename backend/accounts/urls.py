@@ -19,4 +19,9 @@ urlpatterns = [
         "notes/<int:id>/edit/",
         views.edit_note,
         name="edit_note"),
+    path(
+        "notes/<int:id>/delete/",
+        views.delete_note,
+        name="delete_note"
+),
 ]

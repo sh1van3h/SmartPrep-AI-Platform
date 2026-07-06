@@ -83,3 +83,29 @@ def edit_note(request, id):
             "note": note
         }
     )
+
+def delete_note(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id
+    )
+
+    if request.method == "POST":
+
+        subject_id = note.subject.id
+
+        note.delete()
+
+        return redirect(
+            "subject_detail",
+            id=subject_id
+        )
+
+    return render(
+        request,
+        "accounts/delete_note.html",
+        {
+            "note": note
+        }
+    )
