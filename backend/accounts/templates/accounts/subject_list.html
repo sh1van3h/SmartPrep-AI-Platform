@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Subjects</title>
+    <title>SmartPrep AI</title>
 </head>
 <body>
 
-<h1>My Subjects</h1>
+<h1>📚 SmartPrep AI</h1>
+
+<hr>
+
+<h2>My Subjects</h2>
+
+<ul>
 
 {% for subject in subjects %}
-    <p>{{ subject.name }}</p>
+
+    <li>
+    <a href="/subjects/{{ subject.id }}/">
+        {{ subject.name }}
+    </a>
+</li>
+
 {% endfor %}
+
+</ul>
 
 </body>
 </html>

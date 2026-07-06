@@ -1,0 +1,17 @@
+<h1>{{ subject.name }}</h1>
+
+<h3>Notes</h3>
+
+<ul>
+
+{% for note in notes %}
+
+    <li>{{ note.title }}</li>
+
+{% empty %}
+
+    <li>No notes yet.</li>
+
+{% endfor %}
+
+</ul>
