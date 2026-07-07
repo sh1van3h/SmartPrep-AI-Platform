@@ -1,9 +1,10 @@
 from django.shortcuts import render , get_object_or_404
-from .models import Subject , Note , Flashcard
+from .models import Subject , Note , Flashcard , QuizQuestion
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout 
+from django.http import HttpResponse
 from . import ai_service
 # Create your views here.
 
@@ -272,5 +273,121 @@ def summary(request, id):
         "accounts/summary.html",
         {
             "note": note
+        }
+    )
+
+@login_required
+def quiz(request, id):
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    if "current_question" not in request.session:
+        request.session["score"] = 0
+        request.session["current_question"] = 0
+
+    questions = note.quiz_question.all()
+    current_question = request.session["current_question"]
+    if current_question >= len(questions):
+
+
+        request.session["final_score"] = request.session["score"]
+        request.session["total_questions"] = len(questions)
+        request.session.pop("score",None)
+        request.session.pop("current_question",None)
+        return redirect(
+            "quiz_result",
+            id=note.id
+        )
+    question = questions[current_question]
+
+    if request.method == "POST":
+        answer = request.POST.get("answer")
+        if answer == question.correct_option:
+            request.session["score"] += 1
+        request.session["current_question"] += 1
+        return redirect(
+            "quiz",
+            id=note.id
+        )
+
+    return render(
+        request,
+        "accounts/quiz.html",
+        {
+            "note": note,
+            "question":question
+        }
+    )
+
+@login_required
+def generate_quiz(request, id):
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    note.quiz_question.all().delete()
+
+    quizquestions = [
+        {
+            "question": "What is Python?",
+            "option_a": "Programming Language",
+            "option_b": "Database",
+            "option_c": "Browser",
+            "option_d": "Operating System",
+            "correct_option": "A"
+        },
+        {
+            "question": "What is Django?",
+            "option_a": "Framework",
+            "option_b": "Database",
+            "option_c": "Operating System",
+            "option_d": "Programming Language",
+            "correct_option": "A"
+        }
+    ]
+
+    for quizquestion in quizquestions:
+
+        QuizQuestion.objects.create(
+            note=note,
+            question=quizquestion["question"],
+            option_a=quizquestion["option_a"],
+            option_b=quizquestion["option_b"],
+            option_c=quizquestion["option_c"],
+            option_d=quizquestion["option_d"],
+            correct_option=quizquestion["correct_option"]
+        )
+
+    return redirect(
+        "quiz",
+        id=note.id,
+    )
+
+@login_required
+def quiz_result(request, id):
+
+    note = get_object_or_404(
+        Note,
+        id=id,
+        subject__user=request.user
+    )
+
+    score = request.session.get("final_score", 0)
+    total = request.session.get("total_questions", 0)
+    request.session.pop("final_score", None)
+    request.session.pop("total_questions", None)
+
+    return render(
+        request,
+        "accounts/quiz_result.html",
+        {
+            "note": note,
+            "score": score,
+            "total": total
         }
     )

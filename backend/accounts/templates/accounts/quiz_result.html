@@ -1,0 +1,22 @@
+<h1>Quiz Result</h1>
+
+<hr>
+
+<h2>{{ note.title }}</h2>
+
+<p>
+    Your Score:
+    <strong>{{ score }} / {{ total }}</strong>
+</p>
+
+<br>
+
+<a href="{% url 'quiz' note.id %}">
+    Take Quiz Again
+</a>
+
+<br><br>
+
+<a href="{% url 'note_detail' note.id %}">
+    Back to Note
+</a>

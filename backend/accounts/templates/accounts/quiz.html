@@ -1,0 +1,53 @@
+<h1>{{ note.title }}</h1>
+
+<hr>
+
+{% if question %}
+
+    <h2>{{ question.question }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="radio" name="answer" value="A">
+        {{ question.option_a }}
+
+        <br><br>
+
+        <input type="radio" name="answer" value="B">
+        {{ question.option_b }}
+
+        <br><br>
+
+        <input type="radio" name="answer" value="C">
+        {{ question.option_c }}
+
+        <br><br>
+
+        <input type="radio" name="answer" value="D">
+        {{ question.option_d }}
+
+        <br><br>
+
+        <button type="submit">
+
+            Submit
+
+        </button>
+
+    </form>
+
+{% else %}
+
+    <p>No quiz generated yet.</p>
+
+    <a href="{% url 'generate_quiz' note.id %}">
+        Generate Quiz
+    </a>
+
+{% endif %}
+
+<br><br>
+
+<a href="{% url 'note_detail' note.id %}">
+    ← Back to Note
+</a>

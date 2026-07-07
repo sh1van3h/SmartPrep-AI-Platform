@@ -36,3 +36,23 @@ class Flashcard(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+
+class QuizQuestion(models.Model):
+
+    note = models.ForeignKey(
+        Note,
+        on_delete=models.CASCADE,
+        related_name="quiz_question"
+    )
+
+    question = models.TextField()
+
+    option_a = models.CharField(max_length=255)
+    option_b = models.CharField(max_length=255)
+    option_c = models.CharField(max_length=255)
+    option_d = models.CharField(max_length=255)
+    correct_option = models.CharField(max_length=1)
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )

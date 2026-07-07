@@ -55,4 +55,17 @@ urlpatterns = [
         "notes/<int:id>/summary/",
         views.summary,
         name="summary",),
+    path(
+        "notes/<int:id>/generate-quiz/",
+        views.generate_quiz,
+        name="generate-quiz",),
+    path(
+        "notes/<int:id>/quiz/",
+        views.quiz,
+        name="quiz",),
+    path(
+        "notes/<int:id>/quiz-result",
+        views.quiz_result,
+        name = "quiz_result",
+    ),
 ]
