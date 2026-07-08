@@ -58,9 +58,23 @@
 
 {% endif %}
 
-<a href="{% url 'quiz' note.id %}">
-    Take Quiz
-</a>
+{% if has_quiz %}
+
+    <a href="{% url 'quiz' note.id %}">
+        📝 Start Quiz
+    </a>
+<br><br>
+    <a href="{% url 'generate-quiz' note.id %}">
+        🔄 Generate New Quiz
+    </a>
+
+{% else %}
+
+    <a href="{% url 'generate-quiz' note.id %}">
+        📝 Generate Quiz
+    </a>
+
+{% endif %}
 
 <hr>
 

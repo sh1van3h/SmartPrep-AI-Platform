@@ -73,12 +73,13 @@ def note_detail(request, id):
         id=id,
         subject__user=request.user
     )
-
+    has_quiz = note.quiz_question.exists()
     return render(
         request,
         "accounts/note_detail.html",
         {
-            "note": note
+            "note": note,
+            "has_quiz":has_quiz
         }
     )
 
@@ -326,12 +327,14 @@ def quiz(request, id):
             id=note.id
         )
 
+    
+
     return render(
         request,
         "accounts/quiz.html",
         {
             "note": note,
-            "question":question
+            "question":question,
         }
     )
 
