@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout 
 from django.http import HttpResponse
 from . import ai_service
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -212,7 +213,7 @@ def generate_summary(request, id):
     )
 
     if note.ai_summary and not note.summary_is_outdated:
-        return redirect("note_detail", id=note.id)
+        return redirect("summary", id=note.id)
 
     try:
         summary = ai_service.generate_summary(note.content)
@@ -224,7 +225,7 @@ def generate_summary(request, id):
     except Exception as e:
         print(e)  # We'll replace this with proper logging later.
 
-    return redirect("note_detail", id=note.id)
+    return redirect("summary", id=note.id)
 
 @login_required
 def generate_flashcards(request, id):
@@ -344,24 +345,18 @@ def generate_quiz(request, id):
 
     note.quiz_question.all().delete()
 
-    quizquestions = [
-        {
-            "question": "What is Python?",
-            "option_a": "Programming Language",
-            "option_b": "Database",
-            "option_c": "Browser",
-            "option_d": "Operating System",
-            "correct_option": "A"
-        },
-        {
-            "question": "What is Django?",
-            "option_a": "Framework",
-            "option_b": "Database",
-            "option_c": "Operating System",
-            "option_d": "Programming Language",
-            "correct_option": "A"
-        }
-    ]
+    quizquestions = ai_service.generate_quiz(note.content)
+
+    if quizquestions is None:
+        messages.error(
+            request,
+            "The AI service is currently busy. Please try again in a few moments."
+        )
+
+        return redirect(
+        "note_detail",
+        id=note.id)
+        
 
     for quizquestion in quizquestions:
 

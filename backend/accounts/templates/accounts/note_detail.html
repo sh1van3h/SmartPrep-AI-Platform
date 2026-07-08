@@ -48,7 +48,19 @@
 
 <h2>📝 Quiz</h2>
 
-<p>Coming Soon...</p>
+{% if messages %}
+
+    {% for message in messages %}
+
+        <p class="{{ message.tags }}" >{{ message }}</p>
+
+    {% endfor %}
+
+{% endif %}
+
+<a href="{% url 'quiz' note.id %}">
+    Take Quiz
+</a>
 
 <hr>
 
