@@ -68,4 +68,15 @@ urlpatterns = [
         views.quiz_result,
         name = "quiz_result",
     ),
+    path(
+    "subjects/add/",
+    views.add_subject,
+    name="add_subject",
+),
+    path(
+        "subjects/<int:id>/delete",
+        views.delete_subject,
+        name = "delete_subject",
+    ),
+    
 ]

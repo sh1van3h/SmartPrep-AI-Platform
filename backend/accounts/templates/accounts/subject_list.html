@@ -31,5 +31,26 @@
 
 </ul>
 
+<hr>
+
+<h2>Add New Subject</h2>
+
+<form method="POST" action="{% url 'add_subject' %}">
+
+    {% csrf_token %}
+
+    <input
+        type="text"
+        name="name"
+        placeholder="Enter subject name"
+        required
+    >
+
+    <button type="submit">
+        Add Subject
+    </button>
+
+</form>
+
 </body>
 </html>

@@ -19,3 +19,40 @@
 {% endfor %}
 
 </ul>
+
+<hr>
+
+<a href="{% url 'add_note' subject.id %}">
+    ➕ Add Note
+</a>
+
+<br><br>
+
+<a href="{% url 'delete_subject' subject.id %}">
+    🗑 Delete Subject
+</a>
+
+<br><br>
+<h3>Update Name</h3>
+<form method="POST">
+
+    {% csrf_token %}
+
+    <input
+        type="text"
+        name="name"
+        value="{{ subject.name }}"
+        required
+    >
+
+    <button type="submit">
+        Save Subject Name
+    </button>
+
+</form>
+
+<br><br>
+
+<a href="{% url 'subject_list' %}">
+    ← Back to Subjects
+</a>

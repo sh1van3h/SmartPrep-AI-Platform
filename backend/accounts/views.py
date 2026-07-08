@@ -23,6 +23,18 @@ def subject_list(request):
 def subject_detail(request, id):
     subject = get_object_or_404(Subject, id=id, user=request.user)
     notes = Note.objects.filter(subject=subject)
+
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+
+        if name:
+            subject.name = name
+            subject.save()
+        return redirect(
+            "subject_detail",
+            id=subject.id
+        )
+
     return render(
         request,
         "accounts/subject_detail.html",
@@ -36,7 +48,7 @@ def subject_detail(request, id):
 def add_note(request, id):
     subject = get_object_or_404(Subject,
                                 id=id,
-                                subject__user=request.user)
+                                user=request.user)
     if request.method == "POST":
         title = request.POST["title"]
         content = request.POST["content"]
@@ -390,4 +402,30 @@ def quiz_result(request, id):
             "score": score,
             "total": total
         }
+        
     )
+
+@login_required
+def add_subject(request):
+
+    if request.method == "POST":
+
+        name = request.POST.get("name", "").strip()
+
+    if name :
+        Subject.objects.create(
+            name=name,
+            user=request.user
+        )
+
+    return redirect("subject_list")
+
+@login_required
+def delete_subject(request,id):
+    subject = get_object_or_404(
+        Subject,
+        id=id,
+        user=request.user
+    )
+    subject.delete()
+    return redirect("subject_list")
