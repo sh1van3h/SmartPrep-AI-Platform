@@ -20,6 +20,13 @@ def subject_list(request):
         {"subjects": subjects}
     )
 
+def home(request):
+
+    if request.user.is_authenticated:
+        return redirect("subject_list")
+
+    return redirect("login")
+
 @login_required
 def subject_detail(request, id):
     subject = get_object_or_404(Subject, id=id, user=request.user)
@@ -31,6 +38,10 @@ def subject_detail(request, id):
         if name:
             subject.name = name
             subject.save()
+            messages.success(
+                request,
+                "Subject updated successfully."
+)
         return redirect(
             "subject_detail",
             id=subject.id
@@ -51,8 +62,8 @@ def add_note(request, id):
                                 id=id,
                                 user=request.user)
     if request.method == "POST":
-        title = request.POST["title"]
-        content = request.POST["content"]
+        title = request.POST.get("title", "").strip()
+        content = request.POST.get("content", "").strip()
         Note.objects.create(title=title,content=content,
                             subject=subject)
         return redirect("subject_detail" , id=subject.id)
@@ -150,6 +161,9 @@ def delete_note(request, id):
 
 def signup(request):
 
+    if request.user.is_authenticated:
+        return redirect("subject_list")
+
     if request.method == "POST":
 
         form = UserCreationForm(request.POST)
@@ -157,6 +171,11 @@ def signup(request):
         if form.is_valid():
 
             form.save()
+
+            messages.success(
+                request,
+                "Account created successfully. Please log in."
+    )
 
             return redirect("login")
 
@@ -175,11 +194,14 @@ def signup(request):
 
 def user_login(request):
 
+    if request.user.is_authenticated:
+        return redirect("subject_list")
+
     if request.method == "POST":
 
-        username = request.POST["username"]
+        username = request.POST.get("username", "").strip()
 
-        password = request.POST["password"]
+        password = request.POST.get("password", "")
 
         user = authenticate(
             request,
@@ -192,6 +214,11 @@ def user_login(request):
             login(request, user)
 
             return redirect("subject_list")
+        else:
+            messages.error(
+                request,
+                "Invalid username or password."
+            )
 
     return render(
         request,
@@ -224,8 +251,11 @@ def generate_summary(request, id):
         note.save()
 
     except Exception as e:
-        print(e)  # We'll replace this with proper logging later.
-
+        messages.error(
+            request,
+            "The AI service is currently busy. Please try again in a few moments."
+        )
+        return redirect("note_detail", id=note.id)
     return redirect("summary", id=note.id)
 
 @login_required
@@ -237,11 +267,21 @@ def generate_flashcards(request, id):
         subject__user=request.user
     )
 
-    note.flashcards.all().delete()
-
     flashcards = ai_service.generate_flashcards(
         note.content
     )
+
+    if flashcards is None:
+        messages.error(
+            request,
+            "The AI service is currently busy. Please try again in a few moments."
+        )
+
+        return redirect(
+        "note_detail",
+        id=note.id)
+
+    note.flashcards.all().delete()
 
     for flashcard in flashcards:
 
@@ -346,8 +386,6 @@ def generate_quiz(request, id):
         subject__user=request.user
     )
 
-    note.quiz_question.all().delete()
-
     quizquestions = ai_service.generate_quiz(note.content)
 
     if quizquestions is None:
@@ -360,6 +398,7 @@ def generate_quiz(request, id):
         "note_detail",
         id=note.id)
         
+    note.quiz_question.all().delete()
 
     for quizquestion in quizquestions:
 
@@ -410,12 +449,17 @@ def add_subject(request):
 
         name = request.POST.get("name", "").strip()
 
-    if name :
-        Subject.objects.create(
+        if name :
+            Subject.objects.create(
             name=name,
             user=request.user
         )
-
+            
+            messages.success(
+                request,
+                "Subject created successfully."
+)
+        
     return redirect("subject_list")
 
 @login_required
@@ -426,4 +470,8 @@ def delete_subject(request,id):
         user=request.user
     )
     subject.delete()
+    messages.success(
+        request,
+        "Subject deleted successfully."
+)
     return redirect("subject_list")

@@ -8,6 +8,16 @@
 
 <hr>
 
+{% if messages %}
+
+    {% for message in messages %}
+
+        <p class="{{ message.tags }}" >{{ message }}</p>
+
+    {% endfor %}
+
+{% endif %}
+
 <h2>📄 AI Summary</h2>
 
 {% if note.ai_summary %}
@@ -47,16 +57,6 @@
 <hr>
 
 <h2>📝 Quiz</h2>
-
-{% if messages %}
-
-    {% for message in messages %}
-
-        <p class="{{ message.tags }}" >{{ message }}</p>
-
-    {% endfor %}
-
-{% endif %}
 
 {% if has_quiz %}
 

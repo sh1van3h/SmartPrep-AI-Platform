@@ -1,5 +1,11 @@
 <h1>Login</h1>
 
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
 <form method="POST">
 
     {% csrf_token %}
@@ -25,3 +31,10 @@
     </button>
 
 </form>
+
+<p>
+    Don't have an account?
+    <a href="{% url 'signup' %}">
+        Sign up
+    </a>
+</p>
