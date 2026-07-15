@@ -1,26 +1,61 @@
-<h1>Signup</h1>
+{% extends "base.html" %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
+{% block title %}
+Sign Up | SmartPrep AI Platform
+{% endblock %}
 
-<form method="POST">
+{% block content %}
 
-    {% csrf_token %}
+<div class="row justify-content-center">
 
-    {{ form.as_p }}
+    <div class="col-md-6 col-lg-5">
 
-    <button type="submit">
-        Sign Up
-    </button>
+        <div class="card shadow">
 
-</form>
+            <div class="card-body p-4">
 
-<p>
-    Already have an account?
-    <a href="{% url 'login' %}">
-        Login
-    </a>
-</p>
+                <h2 class="text-center mb-4">
+                    Create Your Account 🚀
+                </h2>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <div class="d-grid mt-3">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success">
+
+                            Sign Up
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <hr>
+
+                <p class="text-center mb-0">
+
+                    Already have an account?
+
+                    <a href="{% url 'login' %}">
+                        Login
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

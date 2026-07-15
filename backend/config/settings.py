@@ -27,7 +27,8 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+]
 
 LOGIN_URL = "login"
 
@@ -87,7 +88,7 @@ DATABASES = {
     }
 }
 
-
+print("DB HOST:", config("DB_HOST"))
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
