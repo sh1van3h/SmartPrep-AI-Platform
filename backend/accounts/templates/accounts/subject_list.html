@@ -1,62 +1,124 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SmartPrep AI</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>📚 SmartPrep AI</h1>
+{% block title %}
+Subjects | SmartPrep AI Platform
+{% endblock %}
 
-<hr>
+{% block content %}
 
-<h2>My Subjects</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<a href="{% url 'logout' %}">
-    Logout
-</a>
+    <h2>
+        📚 My Subjects
+    </h2>
 
-<hr>
+</div>
 
-<ul>
 
-{% for subject in subjects %}
+<div class="row">
 
-    <li>
-    <a href="{% url 'subject_detail' subject.id %}">
-        {{ subject.name }}
-    </a>
-</li>
+    {% for subject in subjects %}
 
-{% endfor %}
+    <div class="col-md-4 mb-4">
 
-</ul>
+        <div class="card shadow h-100">
 
-<hr>
+            <div class="card-body">
 
-<h2>Add New Subject</h2>
+                <h5 class="card-title">
+                    {{ subject.name }}
+                </h5>
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
+                <p class="card-text text-muted">
+                    Continue learning and manage your notes.
+                </p>
+
+
+                <a href="{% url 'subject_detail' subject.id %}"
+                   class="btn btn-primary">
+
+                    Open Subject
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="col-12">
+
+        <div class="alert alert-info">
+
+            No subjects added yet. Create your first subject below!
+
+        </div>
+
+    </div>
+
     {% endfor %}
-{% endif %}
 
-<form method="POST" action="{% url 'add_subject' %}">
+</div>
 
-    {% csrf_token %}
 
-    <input
-        type="text"
-        name="name"
-        placeholder="Enter subject name"
-        required
-    >
+<hr class="my-5">
 
-    <button type="submit">
-        Add Subject
-    </button>
 
-</form>
+<div class="card shadow">
 
-</body>
-</html>
+    <div class="card-body">
+
+        <h4 class="mb-3">
+            ➕ Add New Subject
+        </h4>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <form method="POST" action="{% url 'add_subject' %}">
+
+            {% csrf_token %}
+
+
+            <div class="mb-3">
+
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="Enter subject name"
+                    required>
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn btn-success">
+
+                Add Subject
+
+            </button>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
