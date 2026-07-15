@@ -1,62 +1,313 @@
-# Day 1
+# Learnings
 
-## Concepts Learned
+## Overview
 
-- What is a database?
-- Relational Database
-- Primary Key
-- Foreign Key
-- One-to-One Relationship
-- One-to-Many Relationship
-- Many-to-Many Relationship
-- Normalization
-- Orphan Records
-- Cascade Delete
+SmartPrep AI Platform was developed as a learning project to understand full-stack backend development, AI integration, database management, Docker, and production deployment.
 
-## Key Takeaways
+Throughout the development process, several technical concepts and real-world problems were explored.
 
-- A relational database stores data in related tables.
-- Foreign keys connect tables together.
-- Normalization reduces duplicate data.
-- Cascade Delete removes dependent records automatically.
-- Database design should be based on the business problem, not the framework.
+---
 
-## Questions I Asked
+# Django Development
 
-- What happens when a user updates a note?
-- Should AI content be regenerated automatically?
-- Should summaries be stored or generated every time?
+## Learned
 
-## Answers
+- Django project structure
+- Applications and modules
+- URL routing
+- Views
+- Templates
+- Model creation
+- Django ORM
+- Authentication system
+- Template inheritance
+- Migrations
 
-- AI content should be stored.
-- Updating a note marks AI content as outdated.
-- Users regenerate AI content only when they choose.
+---
 
-# Virtual Environment
+# Django MVT Architecture
 
-## What is a Virtual Environment?
+Learned how Django separates application responsibilities.
 
-A virtual environment is an isolated Python environment created for a specific project.
+Structure:
 
-It allows every project to have its own Python packages without affecting other projects on the same computer.
+```
+Model
 
-## Why do we use it?
+↓
 
-- Avoid package conflicts
-- Keep dependencies isolated
-- Make projects reproducible
-- Follow industry standards
+View
 
-## Key Concepts
+↓
 
-- Activation tells the terminal to use the Python and pip inside the virtual environment.
-- Packages are installed inside `venv/Lib/site-packages`.
-- The `venv` folder should not be pushed to GitHub.
-- `requirements.txt` stores the list of project dependencies.
+Template
+```
 
-## Windows PowerShell
+## Model
 
-PowerShell blocks scripts by default because of the Execution Policy.
+Responsible for:
 
-Changing the policy to `RemoteSigned` for the current user allows local activation scripts to run safely.
+- Database structure
+- Relationships
+- Data operations
+
+
+## View
+
+Responsible for:
+
+- Handling requests
+- Business logic
+- Returning responses
+
+
+## Template
+
+Responsible for:
+
+- User interface
+- Displaying data
+
+---
+
+# Database Management
+
+## Learned
+
+- Relational database concepts
+- PostgreSQL setup
+- Foreign key relationships
+- Database migrations
+- Data modeling
+
+
+Important concepts:
+
+- One-to-many relationships
+- Data normalization
+- ORM queries
+
+---
+
+# Authentication
+
+Implemented:
+
+- User registration
+- Login system
+- Logout system
+- Protected routes
+
+
+Learned:
+
+- Django authentication framework
+- Sessions
+- User authorization
+- Login decorators
+
+---
+
+# AI Integration
+
+Implemented AI-powered features:
+
+- Summary generation
+- Flashcard generation
+- Quiz generation
+
+
+Learned:
+
+- API integration
+- Sending prompts
+- Processing AI responses
+- Separating AI logic from application logic
+
+---
+
+# AI Service Architecture
+
+A separate AI service layer was created.
+
+Structure:
+
+```
+Django View
+
+↓
+
+AI Service
+
+↓
+
+Gemini API
+```
+
+Benefits learned:
+
+- Cleaner code
+- Easier debugging
+- Better maintainability
+
+---
+
+# Docker
+
+## Learned
+
+- Containerization concepts
+- Docker images
+- Docker containers
+- Docker Compose
+- Container networking
+
+
+Important lesson:
+
+Different environments have different networking rules.
+
+Local:
+
+```
+DB_HOST=localhost
+```
+
+Docker:
+
+```
+DB_HOST=db
+```
+
+Production:
+
+```
+DB_HOST=production-host
+```
+
+---
+
+# Deployment
+
+Deployed the application using Render.
+
+Learned:
+
+- Production settings
+- Gunicorn
+- Environment variables
+- Database configuration
+- Debugging deployment issues
+
+
+---
+
+# Deployment Problems Solved
+
+## Database Connection Issue
+
+Problem:
+
+```
+failed to resolve host 'db'
+```
+
+Solution:
+
+Understanding the difference between:
+
+- Local database hostname
+- Docker database hostname
+- Production database hostname
+
+
+---
+
+## Django 400 Bad Request
+
+Problem:
+
+```
+400 Bad Request
+```
+
+Solution:
+
+Configured:
+
+- ALLOWED_HOSTS
+- CSRF_TRUSTED_ORIGINS
+
+for production.
+
+
+---
+
+# Frontend Improvements
+
+Initially the project used plain HTML.
+
+Later improved using Bootstrap.
+
+Learned:
+
+- Template inheritance
+- Base templates
+- Responsive layouts
+- Reusable components
+
+---
+
+# Git Workflow
+
+Learned:
+
+- Creating commits
+- Writing meaningful commit messages
+- Pushing changes
+- Managing feature-based commits
+
+
+Example workflow:
+
+```
+git add .
+
+git commit -m "Feature update"
+
+git push
+```
+
+---
+
+# Overall Learning Outcome
+
+SmartPrep AI helped understand the complete software development lifecycle:
+
+```
+Planning
+
+↓
+
+Development
+
+↓
+
+Database Design
+
+↓
+
+AI Integration
+
+↓
+
+Containerization
+
+↓
+
+Deployment
+
+↓
+
+Production Debugging
+```

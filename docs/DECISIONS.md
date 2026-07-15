@@ -1,95 +1,251 @@
-SmartPrep AI Platform - Engineering Decisions
+# Technical Decisions
 
-Decision #1 – Backend Framework
-Decision
+## Overview
 
-Use Django with Django REST Framework (DRF) instead of FastAPI.
+This document explains the major technical decisions made during the development of SmartPrep AI Platform and the reasons behind them.
 
-Reason
-Built-in authentication
-Built-in admin panel
-Excellent ORM
-Mature ecosystem
-Faster development for a complete web application
-Why not FastAPI?
+---
 
-FastAPI is excellent for API-first applications and microservices, but SmartPrep AI requires authentication, admin features, file uploads, and a complete backend framework. FastAPI will be used in TradeWise AI, where it fits naturally.
+# Choosing Django
 
-Decision #2 – Database
-Decision
+## Decision
 
-Use PostgreSQL instead of SQLite.
+The backend was developed using Django.
 
-Reason
-Production-ready relational database
-Better performance
-Supports concurrent users
-Widely used in industry
-Excellent integration with Django
-Why not SQLite?
+## Reasons
 
-SQLite is perfect for small projects and learning, but it stores everything in a single file and isn't ideal for applications expected to grow.
+Django was selected because:
 
-Decision #3 – AI Content Generation
-Decision
+- It provides a complete web framework
+- Built-in authentication system
+- Powerful ORM
+- Secure default settings
+- Fast development process
+- Large community support
 
-AI-generated content will be generated only when the user requests it.
+Django's MVT architecture helped keep the application organized.
+
+---
+
+# Choosing PostgreSQL
+
+## Decision
+
+The project migrated from SQLite to PostgreSQL.
+
+## Reasons
+
+SQLite was useful during initial development, but PostgreSQL was chosen for production because:
+
+- Better handling of relational data
+- Production-ready database system
+- Improved scalability
+- Better support for complex applications
+
+---
+
+# Choosing Django ORM
+
+## Decision
+
+The project uses Django ORM instead of writing raw SQL queries.
+
+## Reasons
+
+Benefits:
+
+- Faster development
+- Database abstraction
+- Safer queries
+- Easier model relationships
+
+Example:
+
+Instead of writing SQL:
+
+```sql
+SELECT * FROM notes;
+```
+
+Django allows:
+
+```python
+Note.objects.all()
+```
+
+---
+
+# Choosing Gemini AI
+
+## Decision
+
+Gemini AI was integrated for AI-powered learning features.
+
+## Reasons
+
+The AI service is used for:
+
+- Generating summaries
+- Creating flashcards
+- Generating quizzes
+
+The AI logic was separated into a service layer to keep the application flexible.
+
+---
+
+# AI Service Layer
+
+## Decision
+
+AI functionality was separated from Django views.
+
+Structure:
+
+```
+views.py
+
+↓
+
+ai_service.py
+
+↓
+
+Gemini API
+```
+
+## Reasons
+
+Benefits:
+
+- Cleaner views
+- Easier debugging
+- Easier AI provider replacement
+- Better code organization
+
+---
+
+# Choosing Docker
+
+## Decision
+
+Docker was introduced for development and deployment.
+
+## Reasons
+
+Docker provides:
+
+- Consistent environments
+- Easier setup
+- Container isolation
+- Simplified deployment
+
+The final setup contains:
+
+```
+Django Container
+
++
+
+PostgreSQL Container
+```
+
+---
+
+# Choosing Bootstrap
+
+## Decision
+
+Bootstrap was used for frontend styling.
+
+## Reasons
+
+Initially the project used plain HTML.
+
+Bootstrap was introduced because:
+
+- Faster UI development
+- Responsive components
+- Cleaner design
+- Less custom CSS required
+
+---
+
+# Choosing Render
+
+## Decision
+
+Render was selected for deployment.
+
+## Reasons
+
+Render provides:
+
+- Simple deployment workflow
+- GitHub integration
+- Managed databases
+- Easy hosting for Django applications
+
+---
+
+# Environment Variable Management
+
+## Decision
+
+Sensitive configuration was moved to environment variables.
 
 Examples:
 
-Generate Summary
-Generate Flashcards
-Generate Quiz
-Generate Interview Questions
-Generate Cheat Sheet
-Reason
-Reduces AI API usage
-Faster note uploads
-Gives users full control
-Lower operational cost
-Why not generate everything automatically?
+```
+DATABASE_PASSWORD
+DATABASE_HOST
+GEMINI_API_KEY
+DEBUG
+```
 
-Most users may only need one feature. Automatically generating all AI outputs wastes API calls, time, and money.
+## Reasons
 
-Decision #4 – AI Content Storage
-Decision
+Benefits:
 
-Store all AI-generated content in the database.
+- Better security
+- Different settings for local and production environments
+- Avoid exposing secrets in GitHub
 
-Examples:
+---
 
-Summary
-Flashcards
-Quiz
-Interview Questions
-Cheat Sheets
-Reason
-Instant retrieval
-No repeated AI requests
-Lower API cost
-Better user experience
-Handling Note Updates
-Decision
+# Database Host Decision
 
-When a note is updated:
+Different environments required different database hosts.
 
-Existing AI content is not deleted.
-It is marked as Outdated.
-The user chooses when to regenerate the AI content.
-Reason
-Avoid unnecessary AI calls
-User stays in control
-Better performance
-Easier to maintain
+Local:
 
-Future Improvements (Not Version 1)
+```
+DB_HOST=localhost
+```
 
-These ideas are intentionally postponed to avoid over-engineering.
+Docker:
 
-AI content versioning
-Automatic change detection
-Partial AI regeneration
-Background AI processing
-ML-based study recommendations
-Semantic search using embeddings
-Real-time notifications
+```
+DB_HOST=db
+```
+
+Production:
+
+```
+DB_HOST=<production database hostname>
+```
+
+Reason:
+
+Each environment has a different networking setup.
+
+---
+
+# Future Technical Decisions
+
+Possible future improvements:
+
+- REST API using Django REST Framework
+- Background tasks using Celery
+- Redis caching
+- Automated testing
+- CI/CD pipeline

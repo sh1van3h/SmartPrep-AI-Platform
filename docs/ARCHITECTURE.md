@@ -1,277 +1,320 @@
-# SmartPrep AI Platform - Architecture
+# Architecture
 
-# Overview
+## Overview
 
-SmartPrep AI Platform is a backend-driven AI learning platform that helps students organize study material, generate AI-powered learning resources, and analyze learning progress.
+SmartPrep AI Platform follows Django's Model-View-Template (MVT) architecture.
 
-The project follows a modular architecture where every module has a single responsibility.
+The application separates:
 
----
+- User interface
+- Business logic
+- Database operations
+- AI processing
 
-# Architecture Diagram
-
-                    User
-                      │
-               Authentication
-                      │
-        ┌─────────────┴─────────────┐
-        │                           │
-     Subjects                   AI Tutor
-        │                           │
-        │                    Conversations
-        │
-      Notes
-        │
-        ├──────────────┬──────────────┬──────────────┐
-        │              │              │              │
-    Summary      Flashcards      Quiz      Interview Questions
-                                      │
-                               Quiz Attempts
-                                      │
-                                Analytics
-                                      │
-                                 Dashboard
+This separation keeps the project maintainable and easier to extend.
 
 ---
 
-# High Level Workflow
+# Project Evolution
 
-1. User registers and logs into the platform.
+The project was developed in multiple stages.
 
-2. User creates study subjects.
+## Phase 1: Django Setup
 
-3. User uploads notes (PDF, DOCX, TXT).
+The project started with a basic Django application structure.
 
-4. The uploaded notes are stored securely.
+Initial goals:
 
-5. The user can choose to generate AI content.
-
-6. Gemini processes the uploaded notes.
-
-7. AI-generated content is stored in the database.
-
-8. User attempts quizzes.
-
-9. Quiz attempts are analyzed.
-
-10. Analytics dashboard displays learning progress.
+- Understand Django project structure
+- Create applications
+- Configure URLs and templates
+- Build the foundation for future features
 
 ---
 
-# Backend Architecture
+## Phase 2: Database Architecture
 
-Client
+Initially Django's default SQLite database was used during development.
+
+Later, the project migrated to PostgreSQL because:
+
+- PostgreSQL is production ready
+- Better support for relational data
+- More suitable for deployment environments
+
+---
+
+## Phase 3: Application Architecture
+
+The final application structure:
+
+```
+SmartPrep AI Platform
+
+User
+
+ |
+
+Subjects
+
+ |
+
+Notes
+
+ |
+
+AI Features
+```
+
+---
+
+# Request Flow
+
+A typical request follows this flow:
+
+```
+User
 
 ↓
 
-Django REST Framework
+Browser
 
 ↓
 
-Views
+Django URL Router
 
 ↓
 
-Services
+View
 
 ↓
 
-Database / Gemini API
+Model / AI Service
 
 ↓
 
-Response
+Database
 
-The project separates business logic from API logic.
+↓
 
-Views will only receive requests and return responses.
-
-Business logic will gradually move into dedicated service classes as the project grows.
-
----
-
-# Application Modules
-
-## Accounts
-
-Responsible for
-
-- Registration
-- Login
-- JWT Authentication
-- User Profile
+Template Response
+```
 
 ---
 
-## Subjects
+# Backend Components
 
-Responsible for
+## Views
 
-- Creating Subjects
-- Updating Subjects
-- Deleting Subjects
+Views handle:
 
----
+- User requests
+- Business logic
+- Authentication checks
+- Database interaction
+- Response rendering
 
-## Notes
-
-Responsible for
-
-- Uploading Notes
-- Viewing Notes
-- Updating Notes
-- Deleting Notes
 
 ---
 
-## AI
+## Models
 
-Responsible for
+Models define the database structure.
 
-- Prompt Building
-- Gemini Integration
-- AI Response Parsing
+Main models:
 
-This module should never directly manage users or notes.
+- User
+- Subject
+- Note
+- Flashcard
+- QuizQuestion
 
-Its only responsibility is AI.
-
----
-
-## Flashcards
-
-Responsible for
-
-Generating and storing flashcards.
+Django ORM is used to communicate with PostgreSQL.
 
 ---
 
-## Quizzes
+## Templates
 
-Responsible for
+The frontend uses Django templates.
 
-- Quiz Generation
+Responsibilities:
 
-- Quiz Questions
+- Display data
+- Handle forms
+- Show AI results
+- Provide user interface
 
-- Quiz Attempts
-
----
-
-## Chat
-
-Responsible for
-
-AI Tutor conversations.
-
-Stores
-
-- User Messages
-
-- AI Responses
-
-- Chat History
+Bootstrap is used for styling.
 
 ---
 
-## Analytics
+# AI Architecture
 
-Responsible for
+AI functionality was separated into its own service layer.
 
-- Quiz Analysis
+Structure:
 
-- Subject Analysis
+```
+Django View
 
-- Dashboard Statistics
+↓
 
-- Charts
+AI Service
 
----
+↓
 
-# Database Philosophy
+Gemini API
 
-The project uses PostgreSQL as a relational database.
+↓
 
-The database follows normalization principles.
+Response Processing
 
-Relationships are maintained using foreign keys.
+↓
 
-Duplicate information should be avoided whenever possible.
-
----
-
-# AI Philosophy
-
-AI content is generated only when requested by the user.
-
-Generated content is stored.
-
-If notes are updated,
-
-AI content becomes
-
-OUTDATED
-
-and the user decides when to regenerate it.
+Database Storage
+```
 
 ---
 
-# Security
+## AI Service Responsibilities
 
-Authentication will use JWT.
+The AI service handles:
 
-Passwords will always be hashed.
+- Summary generation
+- Flashcard generation
+- Quiz generation
 
-Users can only access their own data.
+Keeping AI logic separate prevents large and complex views.
 
 ---
 
-# Design Principles
+# Database Architecture
 
-The project follows these principles.
+Database:
 
-1. Single Responsibility Principle
+```
+PostgreSQL
+```
 
-Every module should have only one responsibility.
+Relationships:
 
-2. Separation of Concerns
+```
+User
 
-AI logic should remain separate from business logic.
+ |
 
-3. Modularity
+Many Subjects
 
-Every feature should be easy to maintain and extend.
+ |
 
-4. Scalability
+Many Notes
 
-The architecture should support future features without major redesign.
+ |
 
-5. Simplicity
+Flashcards / Quiz Questions
+```
 
-Avoid over-engineering.
+---
 
-Only introduce complexity when it solves a real problem.
+# Docker Architecture
+
+The application uses Docker for environment consistency.
+
+Architecture:
+
+```
+Docker Compose
+
+        |
+
+        |---- Django Web Container
+
+        |
+
+        |---- PostgreSQL Database Container
+```
+
+---
+
+## Docker Networking
+
+During development, different environments required different database hosts.
+
+Local development:
+
+```
+DB_HOST=localhost
+```
+
+Docker environment:
+
+```
+DB_HOST=db
+```
+
+Reason:
+
+Docker containers communicate using service names.
+
+---
+
+# Production Architecture
+
+Deployment stack:
+
+```
+User
+
+↓
+
+Render
+
+↓
+
+Gunicorn
+
+↓
+
+Django Application
+
+↓
+
+PostgreSQL Database
+```
+
+---
+
+# Deployment Flow
+
+```
+GitHub Repository
+
+↓
+
+Render Deployment
+
+↓
+
+Docker Build
+
+↓
+
+Gunicorn Server
+
+↓
+
+Live Application
+```
 
 ---
 
 # Future Architecture Improvements
 
-- Background AI Tasks
+Possible improvements:
 
-- ML Recommendation Engine
-
-- Semantic Search
-
-- Notification Service
-
-- AI Content Versioning
-
-These features are intentionally postponed until Version 2.
-
----
-
-# Goal
-
-The goal of SmartPrep AI Platform is not only to generate AI content.
-
-It is to build a maintainable, scalable backend application that demonstrates modern backend development, database design, AI integration, and software engineering principles.
+- REST API layer
+- Separate frontend application
+- Background AI processing
+- Task queue using Celery
+- Caching system
+- Analytics service

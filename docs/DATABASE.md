@@ -1,125 +1,253 @@
-# SmartPrep AI Platform - Database Design
+# Database Design
 
-## Entities
+## Overview
 
-### User
+SmartPrep AI Platform uses PostgreSQL as the production database.
 
-Stores application users.
-
-Relationship
-
-User
-│
-├── Subjects
-├── Notes
-└── Conversations
+The database follows a relational structure because the application contains clear relationships between users, subjects, notes, and AI-generated content.
 
 ---
 
-### Subject
+# Database Technology
 
-Represents a study subject.
+## PostgreSQL
 
-Examples
+PostgreSQL was selected because:
 
-- Python
-- DBMS
-- Operating Systems
+- Production ready
+- Reliable relational database
+- Strong support for relationships
+- Better scalability compared to SQLite
 
-Relationship
+---
 
-One User
+# Entity Relationship Structure
 
-↓
+```
+User
+
+ |
 
 Many Subjects
 
----
-
-### Notes
-
-Stores uploaded study material.
-
-Supported formats
-
-- PDF
-- DOCX
-- TXT
-
-Relationship
-
-One Subject
-
-↓
+ |
 
 Many Notes
 
----
+ |
 
-### Summary
+Flashcards
 
-Stores AI-generated summaries.
+ |
 
-Relationship
-
-One Note
-
-↓
-
-One Summary
+Quiz Questions
+```
 
 ---
 
-### Flashcards
+# User Model
+
+SmartPrep uses Django's built-in authentication system.
+
+Stores:
+
+- Username
+- Password
+- Email
+- Authentication information
+
+
+Relationship:
+
+```
+User
+
+ |
+
+Many Subjects
+```
+
+---
+
+# Subject Model
+
+The Subject model stores learning categories.
+
+Example:
+
+```
+Python
+
+Machine Learning
+
+Database
+```
+
+Fields:
+
+```
+id
+name
+user
+```
+
+Relationship:
+
+```
+User
+
+ |
+
+Subjects
+```
+
+---
+
+# Note Model
+
+The Note model stores study material.
+
+Example:
+
+```
+Title:
+Python Variables
+
+Content:
+Variables store values in memory.
+```
+
+Fields:
+
+```
+id
+title
+content
+subject
+ai_summary
+summary_is_outdated
+```
+
+Relationship:
+
+```
+Subject
+
+ |
+
+Many Notes
+```
+
+---
+
+# Flashcard Model
 
 Stores AI-generated flashcards.
 
-Relationship
+Example:
 
-One Note
+```
+Question:
+What is Django?
 
-↓
+Answer:
+A Python web framework.
+```
+
+Fields:
+
+```
+id
+question
+answer
+note
+```
+
+Relationship:
+
+```
+Note
+
+ |
 
 Many Flashcards
+```
 
 ---
 
-### Quiz
+# QuizQuestion Model
 
-Stores generated quizzes.
+Stores AI-generated quiz questions.
 
-Relationship
+Fields:
 
-One Note
+```
+id
+question
+option_a
+option_b
+option_c
+option_d
+correct_option
+note
+```
 
-↓
+Relationship:
 
-Many Quizzes
+```
+Note
+
+ |
+
+Many Quiz Questions
+```
 
 ---
 
-### Quiz Attempt
+# Database Design Decisions
 
-Stores quiz results.
+## User Data Isolation
 
-Relationship
+Each user can only access their own:
 
-One Quiz
+- Subjects
+- Notes
+- AI-generated content
 
-↓
-
-Many Attempts
+This is enforced using Django query filtering.
 
 ---
 
-### Conversation
+## Foreign Key Relationships
 
-Stores AI Tutor chat history.
+Foreign keys are used to maintain:
 
-Relationship
+- Data consistency
+- Proper relationships
+- Easy querying
 
-One User
+---
 
-↓
+# Migration Process
 
-Many Conversations
+Database changes were managed using Django migrations.
+
+Commands used:
+
+```
+python manage.py makemigrations
+
+python manage.py migrate
+```
+
+---
+
+# Future Database Improvements
+
+Possible improvements:
+
+- User profile table
+- Learning progress table
+- Activity tracking
+- Notes search indexing
+- Analytics tables

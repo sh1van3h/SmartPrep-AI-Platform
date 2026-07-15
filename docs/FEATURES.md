@@ -1,59 +1,216 @@
-# SmartPrep AI Platform - Features
+# Features
 
-## Version 1.0
+## Overview
 
-### Authentication
-- User Registration
-- User Login
-- JWT Authentication
-- User Profile
-
-### Subject Management
-- Create Subject
-- Update Subject
-- Delete Subject
-
-### Notes
-- Upload PDF
-- Upload DOCX
-- Upload TXT
-- View Notes
-- Delete Notes
-- Update Notes
-- AI Status (Current / Outdated)
-
-### AI Features
-- Generate Summary
-- Generate Flashcards
-- Generate Quiz
-- Generate Interview Questions
-- Generate Cheat Sheet
-
-### AI Tutor
-- Ask Questions
-- Answer from Uploaded Notes
-- Fall back to Gemini when information is unavailable
-- Save Chat History
-
-### Dashboard
-- Notes Uploaded
-- Subjects Created
-- Quiz Statistics
-- Study Progress
-
-### Analytics
-- Subject-wise Performance
-- Quiz Accuracy
-- Weekly Study Progress
-- Charts using Matplotlib
+SmartPrep AI Platform provides AI-powered learning tools that help students organize study material and improve revision.
 
 ---
 
-## Future Features
+# Authentication
 
-- ML-based Learning Recommendations
-- Semantic Search
-- AI Study Planner
-- Notifications
-- AI Content Versioning
-- Background AI Processing
+## Completed
+
+Users can:
+
+- Create accounts
+- Login
+- Logout
+- Access personalized data
+
+Implementation:
+
+- Django authentication system
+- User sessions
+- Login protection using decorators
+
+---
+
+# Subject Management
+
+## Completed
+
+Users can manage learning subjects.
+
+Features:
+
+- Add subject
+- View subjects
+- Rename subjects
+- Delete subjects
+
+Example:
+
+```
+User
+
+ |
+
+Subjects
+
+ |
+
+Python
+Machine Learning
+Database
+```
+
+---
+
+# Notes Management
+
+## Completed
+
+Users can create and manage study notes.
+
+Features:
+
+- Add notes
+- View notes
+- Edit notes
+- Delete notes
+
+Notes are organized under subjects.
+
+---
+
+# AI Summary Generator
+
+## Completed
+
+Users can generate summaries from their notes.
+
+Process:
+
+```
+Note Content
+
+↓
+
+Gemini AI
+
+↓
+
+Summary
+
+↓
+
+Database Storage
+```
+
+Features:
+
+- Generate summary
+- Save summary
+- Regenerate outdated summary
+
+---
+
+# AI Flashcard Generator
+
+## Completed
+
+AI generates revision flashcards from notes.
+
+Example:
+
+```
+Question:
+What is Python?
+
+Answer:
+A programming language.
+```
+
+Features:
+
+- Generate flashcards
+- Store flashcards
+- View flashcards
+- Regenerate flashcards
+
+---
+
+# AI Quiz Generator
+
+## Completed
+
+AI creates multiple-choice quizzes.
+
+Features:
+
+- Generate quiz questions
+- Display options
+- Submit answers
+- Calculate score
+- Show results
+
+---
+
+# Quiz System
+
+## Completed
+
+The quiz system includes:
+
+- Question navigation
+- Answer checking
+- Score tracking
+- Result page
+
+---
+
+# UI Improvements
+
+## Completed
+
+The project UI was improved using Bootstrap.
+
+Updated pages:
+
+- Login
+- Signup
+- Subjects
+- Notes
+- AI Summary
+- Flashcards
+- Quiz
+- Quiz Result
+
+---
+
+# Deployment Features
+
+## Completed
+
+Application deployment includes:
+
+- Docker support
+- PostgreSQL database
+- Gunicorn server
+- Render hosting
+
+---
+
+# Completed Project Features
+
+```
+✅ Authentication
+
+✅ Subject Management
+
+✅ Notes CRUD
+
+✅ AI Summary
+
+✅ AI Flashcards
+
+✅ AI Quiz
+
+✅ PostgreSQL
+
+✅ Docker
+
+✅ Render Deployment
+
+✅ Bootstrap UI
+```
