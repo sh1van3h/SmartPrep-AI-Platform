@@ -1,97 +1,243 @@
-<h1>{{ note.title }}</h1>
+{% extends "base.html" %}
 
-<p>{{ note.content }}</p>
+{% block title %}
+{{ note.title }} | SmartPrep AI Platform
+{% endblock %}
 
-<hr>
+{% block content %}
 
-<p><strong>Subject:</strong> {{ note.subject.name }}</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<hr>
+    <div>
 
-{% if messages %}
+        <h2>
+            📝 {{ note.title }}
+        </h2>
 
-    {% for message in messages %}
+        <p class="text-muted mb-0">
+            Subject:
+            <strong>{{ note.subject.name }}</strong>
+        </p>
 
-        <p class="{{ message.tags }}" >{{ message }}</p>
+    </div>
 
-    {% endfor %}
+    <a href="{% url 'subject_detail' note.subject.id %}"
+       class="btn btn-secondary">
 
-{% endif %}
+        ← Back
 
-<h2>📄 AI Summary</h2>
-
-{% if note.ai_summary %}
-
-    <p>✅ Summary Available</p>
-
-{% else %}
-
-    <p>❌ No Summary Generated</p>
-
-{% endif %}
-
-<a href="{% url 'summary' note.id %}">
-    View Summary
-</a>
-
-<hr>
-
-<h2>🃏 Flashcards</h2>
-
-{% if note.flashcards.count %}
-
-    <p>
-        {{ note.flashcards.count }} Flashcards Available
-    </p>
-
-{% else %}
-
-    <p>No Flashcards Generated</p>
-
-{% endif %}
-
-<a href="{% url 'flashcards' note.id %}">
-    View Flashcards
-</a>
-
-<hr>
-
-<h2>📝 Quiz</h2>
-
-{% if has_quiz %}
-
-    <a href="{% url 'quiz' note.id %}">
-        📝 Start Quiz
-    </a>
-<br><br>
-    <a href="{% url 'generate-quiz' note.id %}">
-        🔄 Generate New Quiz
     </a>
 
-{% else %}
+</div>
 
-    <a href="{% url 'generate-quiz' note.id %}">
-        📝 Generate Quiz
-    </a>
 
-{% endif %}
+<div class="card shadow-sm mb-4">
 
-<hr>
+    <div class="card-body">
 
-<h2>⚙️ Actions</h2>
+        <h4 class="mb-3">
+            Note Content
+        </h4>
 
-<a href="{% url 'edit_note' note.id %}">
-    ✏️ Edit Note
-</a>
+        <p style="white-space: pre-line;">
 
-<br><br>
+            {{ note.content }}
 
-<a href="{% url 'delete_note' note.id %}">
-    🗑️ Delete Note
-</a>
+        </p>
 
-<br><br>
+    </div>
 
-<a href="{% url 'subject_detail' note.subject.id %}">
-    ← Back to Subject
-</a>
+</div>
+
+
+
+<div class="row">
+
+    <!-- Summary -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card shadow h-100">
+
+            <div class="card-body">
+
+                <h4>
+                    📄 AI Summary
+                </h4>
+
+                {% if note.ai_summary %}
+
+                    <p class="text-success">
+
+                        ✅ Summary Available
+
+                    </p>
+
+                {% else %}
+
+                    <p class="text-danger">
+
+                        ❌ No Summary Generated
+
+                    </p>
+
+                {% endif %}
+
+                <a href="{% url 'summary' note.id %}"
+                   class="btn btn-primary">
+
+                    View Summary
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Flashcards -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card shadow h-100">
+
+            <div class="card-body">
+
+                <h4>
+                    🃏 Flashcards
+                </h4>
+
+                {% if note.flashcards.count %}
+
+                    <p class="text-success">
+
+                        {{ note.flashcards.count }}
+                        Flashcards Available
+
+                    </p>
+
+                {% else %}
+
+                    <p class="text-danger">
+
+                        No Flashcards Generated
+
+                    </p>
+
+                {% endif %}
+
+                <a href="{% url 'flashcards' note.id %}"
+                   class="btn btn-primary">
+
+                    View Flashcards
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Quiz -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card shadow h-100">
+
+            <div class="card-body">
+
+                <h4>
+                    📝 Quiz
+                </h4>
+
+                {% if has_quiz %}
+
+                    <p class="text-success">
+
+                        Quiz Ready
+
+                    </p>
+
+                    <a href="{% url 'quiz' note.id %}"
+                       class="btn btn-success mb-2 w-100">
+
+                        Start Quiz
+
+                    </a>
+
+                    <a href="{% url 'generate-quiz' note.id %}"
+                       class="btn btn-outline-primary w-100">
+
+                        Generate New Quiz
+
+                    </a>
+
+                {% else %}
+
+                    <p class="text-danger">
+
+                        No Quiz Available
+
+                    </p>
+
+                    <a href="{% url 'generate-quiz' note.id %}"
+                       class="btn btn-primary w-100">
+
+                        Generate Quiz
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<hr class="my-5">
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <h4 class="mb-3">
+
+            ⚙️ Note Actions
+
+        </h4>
+
+        <div class="d-flex gap-3 flex-wrap">
+
+            <a href="{% url 'edit_note' note.id %}"
+               class="btn btn-warning">
+
+                ✏️ Edit Note
+
+            </a>
+
+            <a href="{% url 'delete_note' note.id %}"
+               class="btn btn-danger">
+
+                🗑 Delete Note
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

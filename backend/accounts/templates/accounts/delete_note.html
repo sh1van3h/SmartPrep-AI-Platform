@@ -1,22 +1,70 @@
-<h1>Delete Note</h1>
+{% extends "base.html" %}
 
-<p>
-    Are you sure you want to delete
-    "<strong>{{ note.title }}</strong>"?
-</p>
+{% block title %}
+Delete Note | SmartPrep AI Platform
+{% endblock %}
 
-<form method="POST">
+{% block content %}
 
-    {% csrf_token %}
+<div class="row justify-content-center">
 
-    <button type="submit">
-        Yes, Delete
-    </button>
+    <div class="col-md-6">
 
-</form>
+        <div class="card border-danger shadow">
 
-<br>
+            <div class="card-body text-center">
 
-<a href="{% url 'note_detail' note.id %}">
-    Cancel
-</a>
+                <h2 class="text-danger mb-4">
+
+                    🗑 Delete Note
+
+                </h2>
+
+                <p>
+
+                    Are you sure you want to delete
+
+                    <strong>
+
+                        "{{ note.title }}"
+
+                    </strong>?
+
+                </p>
+
+                <p class="text-muted">
+
+                    This action cannot be undone.
+
+                </p>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger me-2">
+
+                        Yes, Delete
+
+                    </button>
+
+                    <a href="{% url 'note_detail' note.id %}"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

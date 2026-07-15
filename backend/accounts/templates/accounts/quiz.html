@@ -1,53 +1,173 @@
-<h1>{{ note.title }}</h1>
+{% extends "base.html" %}
 
-<hr>
+{% block title %}
+Quiz | SmartPrep AI Platform
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2>
+            📝 AI Quiz
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            {{ note.title }}
+
+        </p>
+
+    </div>
+
+    <a href="{% url 'note_detail' note.id %}"
+       class="btn btn-secondary">
+
+        ← Back
+
+    </a>
+
+</div>
+
 
 {% if question %}
 
-    <h2>{{ question.question }}</h2>
+<div class="card shadow">
 
-    <form method="POST">
-        {% csrf_token %}
-        <input type="radio" name="answer" value="A">
-        {{ question.option_a }}
+    <div class="card-body">
 
-        <br><br>
+        <h4 class="mb-4">
 
-        <input type="radio" name="answer" value="B">
-        {{ question.option_b }}
+            {{ question.question }}
 
-        <br><br>
+        </h4>
 
-        <input type="radio" name="answer" value="C">
-        {{ question.option_c }}
+        <form method="POST">
 
-        <br><br>
+            {% csrf_token %}
 
-        <input type="radio" name="answer" value="D">
-        {{ question.option_d }}
+            <div class="form-check mb-3">
 
-        <br><br>
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="answer"
+                    id="optionA"
+                    value="A"
+                    required>
 
-        <button type="submit">
+                <label class="form-check-label" for="optionA">
 
-            Submit
+                    {{ question.option_a }}
 
-        </button>
+                </label>
 
-    </form>
+            </div>
+
+
+            <div class="form-check mb-3">
+
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="answer"
+                    id="optionB"
+                    value="B">
+
+                <label class="form-check-label" for="optionB">
+
+                    {{ question.option_b }}
+
+                </label>
+
+            </div>
+
+
+            <div class="form-check mb-3">
+
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="answer"
+                    id="optionC"
+                    value="C">
+
+                <label class="form-check-label" for="optionC">
+
+                    {{ question.option_c }}
+
+                </label>
+
+            </div>
+
+
+            <div class="form-check mb-4">
+
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="answer"
+                    id="optionD"
+                    value="D">
+
+                <label class="form-check-label" for="optionD">
+
+                    {{ question.option_d }}
+
+                </label>
+
+            </div>
+
+
+            <div class="text-end">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    Next Question →
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 {% else %}
 
-    <p>No quiz generated yet.</p>
+<div class="card shadow">
 
-    <a href="{% url 'generate_quiz' note.id %}">
-        Generate Quiz
-    </a>
+    <div class="card-body text-center py-5">
+
+        <h3>
+
+            No Quiz Available
+
+        </h3>
+
+        <p class="text-muted">
+
+            Generate an AI quiz from this note.
+
+        </p>
+
+        <a href="{% url 'generate_quiz' note.id %}"
+           class="btn btn-success">
+
+            ✨ Generate Quiz
+
+        </a>
+
+    </div>
+
+</div>
 
 {% endif %}
 
-<br><br>
-
-<a href="{% url 'note_detail' note.id %}">
-    ← Back to Note
-</a>
+{% endblock %}

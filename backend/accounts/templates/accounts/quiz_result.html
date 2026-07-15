@@ -1,22 +1,76 @@
-<h1>Quiz Result</h1>
+{% extends "base.html" %}
 
-<hr>
+{% block title %}
+Quiz Result | SmartPrep AI Platform
+{% endblock %}
 
-<h2>{{ note.title }}</h2>
+{% block content %}
 
-<p>
-    Your Score:
-    <strong>{{ score }} / {{ total }}</strong>
-</p>
+<div class="row justify-content-center">
 
-<br>
+    <div class="col-lg-6">
 
-<a href="{% url 'quiz' note.id %}">
-    Take Quiz Again
-</a>
+        <div class="card shadow text-center">
 
-<br><br>
+            <div class="card-body p-5">
 
-<a href="{% url 'note_detail' note.id %}">
-    Back to Note
-</a>
+                <h1 class="display-4">
+                    🎉
+                </h1>
+
+                <h2 class="text-primary mb-4">
+                    Quiz Completed!
+                </h2>
+
+
+                <hr>
+
+
+                <h4 class="mb-3">
+                    {{ note.title }}
+                </h4>
+
+
+                <p class="fs-4">
+                    Your Score
+                </p>
+
+
+                <h1 class="display-5 fw-bold">
+                    {{ score }} / {{ total }}
+                </h1>
+
+
+                <hr class="my-4">
+
+
+                <div class="d-grid gap-3">
+
+                    <a href="{% url 'quiz' note.id %}"
+                       class="btn btn-primary">
+
+                        🔄 Take Quiz Again
+
+                    </a>
+
+
+                    <a href="{% url 'note_detail' note.id %}"
+                       class="btn btn-secondary">
+
+                        ← Back to Note
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

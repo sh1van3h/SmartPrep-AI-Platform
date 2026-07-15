@@ -1,28 +1,101 @@
-<h1>Add Note</h1>
+{% extends "base.html" %}
 
-<form method="POST">
+{% block title %}
+Add Note | SmartPrep AI Platform
+{% endblock %}
 
-    {% csrf_token %}
+{% block content %}
 
-    <input
-    type="text"
-    name="title"
-    placeholder="Title"
->
+<div class="row justify-content-center">
 
-<br><br>
+    <div class="col-lg-8">
 
-<textarea
-    name="content"
-    placeholder="Content"
-></textarea>
+        <div class="card shadow">
 
-    <br><br>
+            <div class="card-body">
 
-    <button>
+                <div class="d-flex justify-content-between align-items-center mb-4">
 
-        Save
+                    <h2>
+                        ➕ Add Note
+                    </h2>
 
-    </button>
+                    <a href="{% url 'subject_detail' subject.id %}"
+                       class="btn btn-secondary">
 
-</form>
+                        ← Back
+
+                    </a>
+
+                </div>
+
+                <p class="text-muted">
+
+                    Subject:
+                    <strong>{{ subject.name }}</strong>
+
+                </p>
+
+                <hr>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Note Title
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control"
+                            placeholder="Enter note title"
+                            required>
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+
+                            Note Content
+
+                        </label>
+
+                        <textarea
+                            name="content"
+                            rows="10"
+                            class="form-control"
+                            placeholder="Write your notes here..."
+                            required></textarea>
+
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success">
+
+                            💾 Save Note
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

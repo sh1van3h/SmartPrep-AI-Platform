@@ -1,57 +1,126 @@
-<h1>🃏 Flashcards</h1>
+{% extends "base.html" %}
 
-<h2>{{ note.title }}</h2>
+{% block title %}
+Flashcards | SmartPrep AI Platform
+{% endblock %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
+{% block content %}
 
-<hr>
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2>
+            🃏 Flashcards
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            {{ note.title }}
+
+        </p>
+
+    </div>
+
+    <a href="{% url 'note_detail' note.id %}"
+       class="btn btn-secondary">
+
+        ← Back
+
+    </a>
+
+</div>
+
 
 {% if note.flashcards.count %}
 
+<div class="row">
+
     {% for flashcard in note.flashcards.all %}
 
-        <div>
+    <div class="col-lg-6 mb-4">
 
-            <strong>Question:</strong>
+        <div class="card shadow h-100">
 
-            <p>{{ flashcard.question }}</p>
+            <div class="card-body">
 
-            <strong>Answer:</strong>
+                <h5 class="text-primary">
 
-            <p>{{ flashcard.answer }}</p>
+                    ❓ Question
+
+                </h5>
+
+                <p>
+
+                    {{ flashcard.question }}
+
+                </p>
+
+                <hr>
+
+                <h5 class="text-success">
+
+                    ✅ Answer
+
+                </h5>
+
+                <p>
+
+                    {{ flashcard.answer }}
+
+                </p>
+
+            </div>
 
         </div>
 
-        <hr>
+    </div>
 
     {% endfor %}
 
-    <br>
+</div>
 
-<a href="{% url 'generate_flashcards' note.id %}">
-    🔄 Regenerate Flashcards
-</a>
 
-<br><br>
+<div class="text-center mt-4">
+
+    <a href="{% url 'generate_flashcards' note.id %}"
+       class="btn btn-warning">
+
+        🔄 Regenerate Flashcards
+
+    </a>
+
+</div>
 
 {% else %}
 
-    <p>No flashcards generated yet.</p>
+<div class="card shadow">
 
-    <br>
+    <div class="card-body text-center py-5">
 
-    <a href="{% url 'generate_flashcards' note.id %}">
-        Generate Flashcards
-    </a>
+        <h4>
+
+            No Flashcards Generated
+
+        </h4>
+
+        <p class="text-muted">
+
+            Generate AI flashcards to help you revise this note.
+
+        </p>
+
+        <a href="{% url 'generate_flashcards' note.id %}"
+           class="btn btn-primary">
+
+            ✨ Generate Flashcards
+
+        </a>
+
+    </div>
+
+</div>
 
 {% endif %}
 
-<br><br>
-
-<a href="{% url 'note_detail' note.id %}">
-    ← Back to Note
-</a>
+{% endblock %}
